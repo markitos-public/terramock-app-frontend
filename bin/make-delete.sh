@@ -1,31 +1,31 @@
+echo "🗑️ markitos - terramock: delete de imagen Docker"
 #!/usr/bin/env bash
-#.'. - comment make-delete.sh
-#.'. - comment Elimina una imagen Docker local o de GCP.
-#.'. - comment Solo acepta un argumento: version=n.n.n o image=gcr.io/PROJECT_ID/IMAGE_NAME:TAG (semver). No valida si la imagen existe.
+# make-delete.sh
+# Elimina una imagen Docker local, de GCR y Artifact Registry.
+# Solo acepta un argumento: version=n.n.n (semver). No valida si la imagen existe.
+# Uso:
+#   ./bin/make-delete.sh version=1.2.3
 set -euo pipefail
 
 if [ $# -ne 1 ]; then
-  echo "❌ ERROR: Debes pasar exactamente un argumento version=n.n.n o image=gcr.io/PROJECT_ID/IMAGE_NAME:TAG" >&2
+  echo "❌ ERROR: Debes pasar exactamente un argumento version=n.n.n (semver)" >&2
   exit 1
 fi
 ARG="$1"
 IMAGE_NAME="terramock-app-frontend"
 
-echo "🗑️ markitos - terramock: delete de imagen Docker"
-
 if [[ "$ARG" =~ ^version=([0-9]+\.[0-9]+\.[0-9]+)$ ]]; then
   VERSION="${BASH_REMATCH[1]}"
-  echo "🗑️ Eliminando $IMAGE_NAME:$VERSION"
-  docker rmi "$IMAGE_NAME:$VERSION" || true
+  LOCAL_IMAGE="$IMAGE_NAME:$VERSION"
+  GCR_IMAGE="gcr.io/terramock/$IMAGE_NAME:$VERSION"
+  ARTIFACT_IMAGE="us-central1-docker.pkg.dev/terramock/terramock-docker-registry/$IMAGE_NAME:$VERSION"
+  echo "🗑️ markitos - terramock: delete de imagen Docker"
+  for IMG in "$LOCAL_IMAGE" "$GCR_IMAGE" "$ARTIFACT_IMAGE"; do
+    echo "🗑️ Eliminando $IMG"
+    docker rmi "$IMG" || true
+  done
   exit 0
+else
+  echo "❌ ERROR: El argumento debe ser version=n.n.n (semver)" >&2
+  exit 2
 fi
-
-if [[ "$ARG" =~ ^image=(gcr\.io/[a-zA-Z0-9-]+/[a-zA-Z0-9._-]+:[0-9]+\.[0-9]+\.[0-9]+)$ ]]; then
-  IMAGE="${BASH_REMATCH[1]}"
-  echo "🗑️ Eliminando $IMAGE"
-  docker rmi "$IMAGE" || true
-  exit 0
-fi
-
-echo "❌ ERROR: El argumento debe ser version=n.n.n o image=gcr.io/PROJECT_ID/IMAGE_NAME:TAG (semver)" >&2
-exit 2

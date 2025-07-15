@@ -1,0 +1,36 @@
+name: Build & Publish Docker image to GCP Artifact Registry
+
+on:
+  push:
+    tags:
+      - '[0-9]+.[0-9]+.[0-9]+'
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          service_account_key: ${{ secrets.GCP_SA_KEY }}
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+
+      - name: Configure Docker for Artifact Registry
+        run: |
+          gcloud auth configure-docker us-east1-docker.pkg.dev
+
+      - name: Build Docker image
+        run: |
+          IMAGE_NAME=terramock-app-frontend
+          IMAGE_TAG=${GITHUB_REF#refs/tags/}
+          docker build -t us-east1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/terramock-docker-registry/$IMAGE_NAME:$IMAGE_TAG .
+
+      - name: Push Docker image to Artifact Registry
+        run: |
+          IMAGE_NAME=terramock-app-frontend
+          IMAGE_TAG=${GITHUB_REF#refs/tags/}
+          docker push us-east1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/terramock-docker-registry/$IMAGE_NAME:$IMAGE_TAG

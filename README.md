@@ -1,3 +1,65 @@
+# terramock-app-frontend
+
+## Flujo de trabajo alineado
+
+### Variables obligatorias
+- `version` debe tener el formato:
+  - `local=n.n.n` o `google=n.n.n` para `make image` y `make run`
+  - `version=n.n.n` para `make delete` y `make publish`
+- `project_id` debe ser el ID de tu proyecto en GCP (por ejemplo, `terramock`)
+
+### Comandos principales
+
+- **Construir imagen:**
+  ```sh
+  make image version=local=1.2.3         # 🏗️  Local
+  make image version=google=1.2.3        # 🏗️  Google Artifact Registry
+  ```
+
+- **Ejecutar imagen:**
+  ```sh
+  make run version=local=1.2.3           # 🏃 Local
+  make run version=google=1.2.3          # 🏃 Desde GCR
+  ```
+
+- **Publicar en Artifact Registry:**
+  ```sh
+  make publish version=version=1.2.3 project_id=terramock   # 🚚 Publicar
+  ```
+
+- **Eliminar imágenes:**
+  ```sh
+  make delete version=version=1.2.3      # 🧹 Eliminar local, GCR y Artifact Registry
+  ```
+
+- **Ayuda:**
+  ```sh
+  make help                              # 📖 Ayuda completa
+  ```
+
+---
+
+#### 🎯 EJEMPLOS RÁPIDOS
+
+```sh
+make image version=local=1.2.3
+make image version=google=1.2.3
+make run version=local=1.2.3
+make run version=google=1.2.3
+make publish version=version=1.2.3 project_id=terramock
+make delete version=version=1.2.3
+make help
+```
+
+### Notas y convenciones
+- Todos los comandos requieren que la variable `version` esté en el formato correcto según el target.
+- El Makefile valida el formato antes de ejecutar los scripts.
+- Los scripts solo aceptan un argumento y validan su formato.
+- El código es limpio, directo y alineado con buenas prácticas (KISS, YAGNI, SOLID).
+- El nombre de la imagen se toma automáticamente del nombre del directorio del repositorio.
+- No se realiza login ni validación de permisos de gcloud en los scripts.
+
+---
 # Terramock App Frontend
 
 ## Descripción
@@ -112,3 +174,43 @@ terraform version
 
 - Si no tienes permisos para publicar en GCR, solicita a tu administrador una cuenta de servicio con los roles indicados y descarga el JSON de credenciales.
 - El sistema es portable y puede usarse en cualquier proyecto Docker siguiendo la misma convención de argumentos.
+
+---
+
+## 📦 CI/CD: Publicar imagen Docker en Artifact Registry (GCP) con GitHub Actions
+
+### Pipeline automático
+
+Cada vez que creas un tag semver **estricto** (ejemplo: `1.2.3`) y lo pusheas a GitHub, se construye y publica la imagen Docker en Artifact Registry usando ese tag como versión.
+
+#### Requisitos previos
+
+- Haber creado un repositorio Artifact Registry en GCP llamado `terramock-docker-registry` en la región `us-east1`.
+- Añadir estos secretos en la configuración del repositorio de GitHub:
+  - `GCP_PROJECT_ID`: ID de tu proyecto GCP (ejemplo: `terramock`)
+  - `GCP_SA_KEY`: Contenido del JSON de una cuenta de servicio con permisos de `Artifact Registry Writer` y `Storage Admin`
+
+#### ¿Qué hace el pipeline?
+
+1. Solo se ejecuta cuando creas un tag semver (`vX.Y.Z`).
+2. Hace checkout del código.
+3. Configura el SDK de Google Cloud y autentica Docker.
+4. Construye la imagen Docker usando el Dockerfile del proyecto.
+5. Publica la imagen en Artifact Registry en la ruta:
+   ```
+   us-east1-docker.pkg.dev/$GCP_PROJECT_ID/terramock-docker-registry/terramock-app-frontend:$TAG
+   ```
+
+#### Ejemplo de despliegue manual
+
+Para desplegar la imagen publicada en Cloud Run:
+
+```sh
+gcloud run deploy terramock-app-frontend \
+  --image us-east1-docker.pkg.dev/$GCP_PROJECT_ID/terramock-docker-registry/terramock-app-frontend:v1.2.3 \
+  --region us-east1 \
+  --platform managed \
+  --allow-unauthenticated
+```
+
+> Reemplaza `$GCP_PROJECT_ID` y `v1.2.3` por los valores correspondientes.

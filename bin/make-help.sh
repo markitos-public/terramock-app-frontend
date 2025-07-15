@@ -1,16 +1,33 @@
 #!/usr/bin/env bash
-#.'. - comment make-help.sh
- #.'. - comment Muestra la ayuda de uso de los comandos make. Cada comando acepta solo los argumentos indicados, sin valores por defecto.
-#.'. - comment El nombre de la imagen se toma automáticamente del nombre del directorio del repositorio.
-#.'. - comment Esto permite reutilizar los scripts en cualquier proyecto siguiendo la convención de nombres.
+# make-help.sh
 set -euo pipefail
 
-echo "📝 markitos - terramock: ayuda de comandos disponibles"
-echo "  make image image=local=n.n.n                - Construye la imagen Docker local (semver requerido)"
-echo "  make image image=gcr=n.n.n                  - Construye la imagen Docker para GCR (semver requerido)"
-echo "  make run version=n.n.n                      - Ejecuta el contenedor local en el puerto \\${PORT}"
-echo "  make delete version=n.n.n                   - Elimina la imagen Docker local"
-echo "  make publish image=gcr=n.n.n project_id=xx  - Publica la imagen en GCR (usa make-publish.sh)"
-echo "  make help                                   - Muestra esta ayuda"
-echo "      Ejemplo: make image image=gcr=1.2.3"
-echo "      Ejemplo: make image image=local=1.2.3"
+echo "🚀 markitos - terramock: comandos Makefile disponibles"
+echo ""
+echo "🛠️  Build:"
+echo "  👉 make image version=local=n.n.n           # 🏗️  Construye imagen Docker local (semver requerido)"
+echo "  👉 make image version=google=n.n.n          # 🏗️  Construye imagen Docker para GCR (semver requerido)"
+echo ""
+echo "▶️  Run:"
+echo "  👉 make run version=local=n.n.n             # 🏃 Ejecuta el contenedor local"
+echo "  👉 make run version=google=n.n.n            # 🏃 Ejecuta el contenedor desde GCR"
+echo ""
+echo "📤 Publish:"
+echo "  👉 make publish version=version=n.n.n project_id=mi-proyecto  # 🚚 Publica la imagen en Artifact Registry"
+echo ""
+echo "🗑️  Delete:"
+echo "  👉 make delete version=version=n.n.n        # 🧹 Elimina la imagen local, GCR y Artifact Registry"
+echo ""
+echo "🆘 Help:"
+echo "  👉 make help                                # 📖 Muestra esta ayuda"
+echo ""
+echo "═══════════════════════════════════════════════════════════════"
+echo "🎯 EJEMPLOS:"
+echo "  make image version=local=1.2.3"
+echo "  make image version=google=1.2.3"
+echo "  make run version=local=1.2.3"
+echo "  make run version=google=1.2.3"
+echo "  make publish version=version=1.2.3 project_id=terramock"
+echo "  make delete version=version=1.2.3"
+echo "  make help"
+echo "═══════════════════════════════════════════════════════════════"
