@@ -85,8 +85,29 @@ Automatización de build, ejecución y publicación de imágenes Docker para est
   - Una cuenta de servicio con permisos de `roles/storage.admin` y `roles/artifactregistry.writer`.
   - El archivo de credenciales JSON de la cuenta de servicio.
   - Haber hecho login con:  
-    `gcloud auth activate-service-account --key-file=KEY.json`  
+
+    `gcloud auth activate-service-account --key-file=KEY.json`
     `gcloud auth configure-docker`
+
+### 🔑 Permisos mínimos para publicar en Artifact Registry
+
+La cuenta de servicio debe tener el rol:
+
+- `roles/artifactregistry.writer` (mínimo necesario para push)
+
+Puedes asignarlo así:
+
+```sh
+gcloud projects add-iam-policy-binding terramock \
+  --member="serviceAccount:TU_SA@terramock.iam.gserviceaccount.com" \
+  --role="roles/artifactregistry.writer"
+```
+
+Verifica que el repositorio existe en la región correcta:
+
+```sh
+gcloud artifacts repositories list --location=us-central1 --project=terramock
+```
 
 ## Uso rápido
 
