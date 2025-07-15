@@ -7,27 +7,23 @@
 #   ./bin/make-publish.sh version=1.2.3 project_id=xxxx
 set -euo pipefail
 
+
 if [ $# -ne 2 ]; then
-  echo "❌ ERROR: Debes pasar exactamente dos argumentos: version=n.n.n project_id=xxxx" >&2
+  echo "❌ ERROR: Debes pasar exactamente dos argumentos: n.n.n project_id" >&2
   exit 1
 fi
-ARG_VERSION="$1"
-ARG_PROJECT="$2"
+VERSION="$1"
+PROJECT_ID="$2"
 IMAGE_NAME="$(basename "$(pwd)")"
 
-if [[ "$ARG_VERSION" =~ ^version=([0-9]+\.[0-9]+\.[0-9]+)$ ]]; then
-  VERSION="${BASH_REMATCH[1]}"
-else
-  echo "❌ ERROR: El primer argumento debe ser version=n.n.n (semver)" >&2
+# Validar semver estricto
+if [[ ! "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+  echo "❌ ERROR: El primer argumento debe ser n.n.n (semver)" >&2
   exit 2
 fi
 
-if [[ "$ARG_PROJECT" =~ ^project_id=([a-zA-Z0-9-]+)$ ]]; then
-  PROJECT_ID="${BASH_REMATCH[1]}"
-elif [[ "$ARG_PROJECT" =~ ^([a-zA-Z0-9-]+)$ ]]; then
-  PROJECT_ID="${BASH_REMATCH[1]}"
-else
-  echo "❌ ERROR: El segundo argumento debe ser project_id=xxxx o xxxx" >&2
+if [[ ! "$PROJECT_ID" =~ ^[a-z]([a-z0-9-]*[a-z0-9])?$ ]]; then
+  echo "❌ ERROR: El segundo argumento debe ser un project_id válido (letras minúsculas, números, guiones, empieza y termina por letra)" >&2
   exit 3
 fi
 

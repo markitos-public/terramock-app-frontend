@@ -12,7 +12,7 @@ if [ $# -ne 1 ]; then
   exit 1
 fi
 VERSION="$1"
-IMAGE_NAME="terramock-app-frontend"
+IMAGE_NAME="$(basename "$(pwd)")"
 
 if [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
   LOCAL_IMAGE="$IMAGE_NAME:$VERSION"

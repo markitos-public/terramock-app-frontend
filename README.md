@@ -31,7 +31,7 @@
 
 - **Publicar en Artifact Registry:**
   ```sh
-  make publish version=version=1.2.3 project_id=terramock   # 🚚 Publicar
+  make publish 1.2.3 terramock   # 🚚 Publicar
   ```
 
 
@@ -56,7 +56,7 @@ make image version=local=1.2.3
 make image version=google=1.2.3
 make run version=local=1.2.3
 make run version=google=1.2.3
-make publish version=version=1.2.3 project_id=terramock
+make publish 1.2.3 terramock
 make delete 1.2.3
 make help
 ```

@@ -41,15 +41,15 @@ tag:
 
 delete-tag:
 	@if ! echo "$(version)" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+$$'; then \
-	  echo '❌ ERROR: Debes pasar n.n.n (semver)'; \
+	  echo '❌ ERROR: Debes pasar version=n.n.n (semver)'; \
 	  exit 2; \
 	fi
 	chmod +x ./bin/make-delete-tag.sh
 	./bin/make-delete-tag.sh $(version)
 
 publish:
-	@if ! echo "$(version)" | grep -Eq '^version=[0-9]+\.[0-9]+\.[0-9]+$$'; then \
-	  echo '❌ ERROR: Debes pasar version="version=n.n.n" (semver)'; \
+	@if ! echo "$(version)" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+$$'; then \
+	  echo '❌ ERROR: Debes pasar version=n.n.n (semver)'; \
 	  exit 2; \
 	fi
 	chmod +x ./bin/make-publish.sh
