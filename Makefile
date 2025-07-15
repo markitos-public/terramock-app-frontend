@@ -54,3 +54,7 @@ publish:
 	fi
 	chmod +x ./bin/make-publish.sh
 	./bin/make-publish.sh $(version) $(project_id)
+
+clean:
+	rm -rf .terraform
+	rm -f *.tfstate *.tfstate.backup .terraform.lock.hcl
