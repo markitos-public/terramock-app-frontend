@@ -22,13 +22,30 @@ run:
 	chmod +x ./bin/make-run.sh
 	./bin/make-run.sh $(version)
 
+
 delete:
-	@if ! echo "$(version)" | grep -Eq '^version=[0-9]+\.[0-9]+\.[0-9]+$$'; then \
-	  echo '❌ ERROR: Debes pasar version="version=n.n.n" (semver)'; \
+	@if ! echo "$(version)" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+$$'; then \
+	  echo '❌ ERROR: Debes pasar n.n.n (semver)'; \
 	  exit 2; \
 	fi
 	chmod +x ./bin/make-delete.sh
 	./bin/make-delete.sh $(version)
+
+tag:
+	@if ! echo "$(version)" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+$$'; then \
+	  echo '❌ ERROR: Debes pasar n.n.n (semver)'; \
+	  exit 2; \
+	fi
+	chmod +x ./bin/make-tag.sh
+	./bin/make-tag.sh $(version)
+
+delete-tag:
+	@if ! echo "$(version)" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+$$'; then \
+	  echo '❌ ERROR: Debes pasar n.n.n (semver)'; \
+	  exit 2; \
+	fi
+	chmod +x ./bin/make-delete-tag.sh
+	./bin/make-delete-tag.sh $(version)
 
 publish:
 	@if ! echo "$(version)" | grep -Eq '^version=[0-9]+\.[0-9]+\.[0-9]+$$'; then \

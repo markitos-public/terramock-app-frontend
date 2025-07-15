@@ -8,7 +8,14 @@
   - `version=n.n.n` para `make delete` y `make publish`
 - `project_id` debe ser el ID de tu proyecto en GCP (por ejemplo, `terramock`)
 
-### Comandos principales
+
+## 🚦 Comandos principales
+
+
+- **Crear y pushear tag git:**
+  ```sh
+  make tag 1.2.3                         # 🏷️  Crea y pushea un tag git semver (confirma antes)
+  ```
 
 - **Construir imagen:**
   ```sh
@@ -27,9 +34,10 @@
   make publish version=version=1.2.3 project_id=terramock   # 🚚 Publicar
   ```
 
+
 - **Eliminar imágenes:**
   ```sh
-  make delete version=version=1.2.3      # 🧹 Eliminar local, GCR y Artifact Registry
+  make delete 1.2.3                      # 🧹 Eliminar local, GCR y Artifact Registry
   ```
 
 - **Ayuda:**
@@ -39,15 +47,17 @@
 
 ---
 
+
 #### 🎯 EJEMPLOS RÁPIDOS
 
 ```sh
+make tag 1.2.3
 make image version=local=1.2.3
 make image version=google=1.2.3
 make run version=local=1.2.3
 make run version=google=1.2.3
 make publish version=version=1.2.3 project_id=terramock
-make delete version=version=1.2.3
+make delete 1.2.3
 make help
 ```
 
