@@ -35,6 +35,6 @@ jobs:
       - name: Run Snyk Container test
         uses: snyk/actions/docker@master
         with:
-          image: us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/terramock-docker-registry/terramock-app-frontend:${GITHUB_REF#refs/tags/}
+          image: us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/terramock-docker-registry/terramock-app-frontend:1.0.0
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
