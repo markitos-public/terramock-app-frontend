@@ -28,7 +28,7 @@ jobs:
           gcloud auth configure-docker us-central1-docker.pkg.dev
 
       - name: snyk scan
-        uses: snyk/actions/docker@v2
+        uses: snyk/actions/docker@v3
         with:
           image: us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/terramock-docker-registry/terramock-app-frontend:${GITHUB_REF#refs/tags/}
           args: --file=Dockerfile
