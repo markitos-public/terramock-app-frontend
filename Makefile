@@ -25,7 +25,7 @@ run:
 
 delete:
 	@if ! echo "$(version)" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+$$'; then \
-	  echo '❌ ERROR: Debes pasar n.n.n (semver)'; \
+	  echo '❌ ERROR: Debes pasar version=n.n.n (semver)'; \
 	  exit 2; \
 	fi
 	chmod +x ./bin/make-delete.sh
@@ -33,7 +33,7 @@ delete:
 
 tag:
 	@if ! echo "$(version)" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+$$'; then \
-	  echo '❌ ERROR: Debes pasar n.n.n (semver)'; \
+	  echo '❌ ERROR: Debes pasar version=n.n.n (semver)'; \
 	  exit 2; \
 	fi
 	chmod +x ./bin/make-tag.sh
