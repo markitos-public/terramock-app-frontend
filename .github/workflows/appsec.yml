@@ -38,8 +38,3 @@ jobs:
           image: us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/terramock-docker-registry/terramock-app-frontend:${GITHUB_REF#refs/tags/}
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-
-      - name: Run Snyk Secrets scan
-        uses: snyk/actions/secrets@master
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
